@@ -1,0 +1,7 @@
+realtime flex messaging server.
+
+robust and scalable messaging server based on gevent and amfast framework
+
+
+depends on: amfast, psycorg2, gevent, webpy, gevent-pyzmq
+
