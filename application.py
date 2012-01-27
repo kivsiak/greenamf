@@ -1,5 +1,6 @@
 import argparse
 import sys
+from gevent.pool import Pool
 from gevent.pywsgi import WSGIServer
 from greenamf.Node import Node
 
@@ -13,4 +14,5 @@ if __name__ == '__main__':
     parser.add_argument("-D", "--remoteDebug", action="store_true", help="enable remote debug")
     args = parser.parse_args()
     print 'Serving on...' + str(args.port)
-    WSGIServer(('', args.port), Node({}).getHandler()).serve_forever()
+    pool = Pool(10000)
+    WSGIServer(('', args.port), Node({}).getHandler(), spawn=pool).serve_forever()

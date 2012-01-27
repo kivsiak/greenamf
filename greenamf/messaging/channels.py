@@ -7,7 +7,7 @@ from amfast.remoting import memcache_manager
 from amfast.remoting.channel import ChannelSet
 from amfast.remoting.connection import Connection, ConnectionError
 from amfast.remoting.connection_manager import ConnectionManager, NotConnectedError, SessionAttrError
-from amfast.remoting.wsgi_channel import WsgiChannel
+from amfast.remoting.wsgi_channel import WsgiChannel, WsgiChannelSet
 import gevent
 import amfast.remoting.flex_messages as messaging
 import time
@@ -22,6 +22,7 @@ class StreamingGeventChannel(WsgiChannel):
         self.heart_interval = heart_interval
 
     def __call__(self, environ, start_response):
+
         if environ['CONTENT_TYPE'] == self.CONTENT_TYPE:
             # Regular AMF message
             return WsgiChannel.__call__(self, environ, start_response)
@@ -182,7 +183,6 @@ class StreamingGeventChannel(WsgiChannel):
 
 
 
-
-
-
-
+class SecureChannelSet(WsgiChannelSet):
+    def checkCredentials(self, user, password):
+        return True

@@ -12,7 +12,7 @@ class MyService(RPCService):
 
     @operation("returnTrue")
     def operationA(self):
-        gevent.sleep(1000)
+        gevent.sleep(15)
         return True
 
     @operation("echo")
