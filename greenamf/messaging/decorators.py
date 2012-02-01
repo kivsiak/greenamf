@@ -5,14 +5,13 @@ from gevent.local import local
 __author__ = 'kivsiak@gmail.com'
 
 
-def operation(name, auth = False):
+def operation(name = None, secure = False):
     def realDecorator(f):
-        f.name = name
-        f.secure = False
+        f.name = name or f.__name__
+        f.secure = secure
         f.operation = True
         return f
     return realDecorator
-
 
 
 
@@ -52,11 +51,12 @@ def mine(self):
 class RPCService(remoting.Service):
     __metaclass__ = RPCServiceBase
 
-    def __init__(self):
+    def __init__(self, app ):
         self.context = local()
         super(RPCService, self).__init__(self.name)
         for name, method in self.operations.items():
             self.mapTarget(remoting.ExtCallableTarget(Wrapper(self, method), name, secure=method.secure))
+        self.app = app
 
     def callRPCMethod(self, method , packet, msg,  *args):
         self.context.packet = packet

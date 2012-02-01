@@ -1,18 +1,40 @@
 __author__ = 'kivsiak@gmail.com'
 
-import web
+
+class A(object):
+    def __init__(self, app):
+        print "a"
+        self.app  = app
+
+class B(object):
+    def __init__(self, app):
+        print "b"
+        self.app = app
 
 
-urls = (
-    '/', 'index'
-    )
+class C(object):
+    def __init__(self, app, args):
+        print "C " + args
+        self.args = args
+        self.app =app
 
-class index:
-    def GET(self):
-        web.header('Content-Type', 'text/html')
-        return "aaa"
+class APP(object):
+    def __init__(self):
+        print "aapp"
 
-if __name__ == "__main__":
-    app = web.application(urls, globals())
-    app.internalerror = web.debugerror
-    app.run()
+
+chain = [A, B, (C, "args")]
+
+
+d = A(B(C( APP(), "args")))
+#chain.reverse()
+result = APP()
+for item in chain:
+    if type(item) == tuple:
+        result = item[0](result, *item[1:])
+    else:
+        result = item(result)
+
+print d
+
+print result
