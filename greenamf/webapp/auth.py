@@ -8,7 +8,6 @@ class AuthManager(object):
     pass
 
 
-
 class AuthRequest(Request):
     def __init__(self, environ, populate_request=True, shallow=False):
         super(AuthRequest, self).__init__(environ, populate_request, shallow)
@@ -27,7 +26,6 @@ class AuthRequest(Request):
             return self.environ['beaker.session']
         except  KeyError as e:
             raise  KeyError(e, "Session is not intitialized")
-
 
 def auth_required(func):
     def wrapper(request, *args, **kvargs):

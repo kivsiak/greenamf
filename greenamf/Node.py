@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+__author__ = 'kivsiak@gmail.com'
+
 from amfast import class_def
 from amfast.class_def.sa_class_def import  SaClassDef
 from amfast.remoting import ServiceMapper
@@ -12,7 +14,6 @@ import zmq
 from greenamf.messaging.channels import StreamingGeventChannel, SecureChannelSet
 from greenamf.webapp.auth import AuthRequest
 
-__author__ = 'kivsiak@gmail.com'
 
 
 class Node(object):
