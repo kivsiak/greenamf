@@ -12,7 +12,7 @@ import sqlalchemy
 from werkzeug.exceptions import  HTTPException
 import zmq
 from greenamf.messaging.channels import StreamingGeventChannel, SecureChannelSet
-from greenamf.webapp.auth import AuthRequest
+from greenamf.web.auth import AuthRequest
 
 
 
@@ -31,7 +31,7 @@ class Node(object):
     def initDb(self):
         self.engine = create_engine(self.settings.database)
         #грязный хак
-        self.settings.models[0][0].metadata.create_all(self.engine)
+        self.settings.models.Base.metadata.create_all(self.engine)
         from sqlalchemy.orm import sessionmaker
         self._sessionFactory= sessionmaker(bind=self.engine)
 
@@ -55,8 +55,10 @@ class Node(object):
             self.channelSet.service_mapper.mapService(Service(self))
         class_mapper = class_def.ClassDefMapper()
 
-        for clazz, alias in self.settings.models:
-            class_mapper.mapClass(SaClassDef(clazz, alias))
+        import inspect
+        for name, obj in inspect.getmembers(self.settings.models):
+                if inspect.isclass(obj)  and hasattr(obj, 'amf_alias'):
+                    class_mapper.mapClass(SaClassDef(obj, getattr(obj, 'amf_alias')))
 
         channel.endpoint.encoder.class_def_mapper = class_mapper
         channel.endpoint.decoder.class_def_mapper = class_mapper

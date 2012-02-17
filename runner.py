@@ -15,4 +15,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print 'Serving on...' + str(args.port)
     pool = Pool(10000)
-    WSGIServer(('', args.port), Node(settings.settings).getHandler(), spawn=pool).serve_forever()
+    WSGIServer(('', args.port), Node(settings).getHandler(), spawn=pool).serve_forever()
